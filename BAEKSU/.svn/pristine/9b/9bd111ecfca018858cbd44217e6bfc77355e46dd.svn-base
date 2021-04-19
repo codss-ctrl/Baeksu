@@ -1,0 +1,123 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<style>
+* {
+	text-decoration: none;
+	text-align: center;
+}
+
+a:hover {
+	cursor: pointer;
+}
+</style>
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery-3.5.1.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		var temp = "{{list['in_date']}}";
+		var yyyy = temp.substring(0, 4);
+		var mm = temp.substring(4, 6);
+		var dd = temp.substring(6, 8);
+		document.getElementById('joinDate').innerHTML = yyyy + "-" + mm + "-"
+				+ dd;
+	}
+
+	function quit() {
+		var flag_del = confirm("탈퇴 후 같은 아이디로 재가입이 불가능합니다. \n탈퇴하시겠습니까?");
+
+		var mem_id = $("#mem_id").html();
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&mem_id=" + mem_id;
+
+		console.log(param)
+
+		if (flag_del) {
+
+			$.ajax({
+				url : "quit.ajax",
+				data : param,
+				dataType : "json",
+				type : "get",
+				async : false,
+				success : function(data) {
+					if (data.msg == "ok") {
+						alert("어어 됐다")
+						location.href = "main_view";
+					} else {
+						alert("처리 도중 오류가 발생했습니다. 관리자에게 문의해주세요.");
+					}
+				}
+			});
+		} else {
+			console.log("탈퇴안할래")
+		}
+	}
+
+	Kakao.init('fc6130c6feab0dfdc23efb0bbb610907'); //발급받은 키 중 javascript키를 사용해준다.
+	console.log("----sdk초기화----"); // sdk초기화여부판단
+	console.log(Kakao.isInitialized()); // sdk초기화여부판단
+
+	function kakao_quit() {
+
+		Kakao.API.request({
+			url : '/v1/user/unlink',
+			success : function(response) {
+				console.log(response);
+			},
+			fail : function(error) {
+				console.log(error);
+			},
+		});
+
+		if (!Kakao.Auth.getAccessToken()) {
+			console.log('Not logged in.');
+			return;
+		}
+		Kakao.Auth.logout(function() {
+			console.log(Kakao.Auth.getAccessToken());
+		});
+	}
+</script>
+
+<img id="mypage" src=image/mypage.png>
+<br />
+<br />
+<form action="">
+	<table border='1' id="my_info">
+		<tr>
+			<td>아이디</td>
+			<td id="mem_id">{{list['mem_id']}}</td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td>{{list['mem_name']}}</td>
+		</tr>
+		<tr>
+			<td>직종</td>
+			<td>{{list['mem_job']}}</td>
+		</tr>
+		<tr>
+			<td>디데이명</td>
+			<td>{{list['dday_title']}}</td>
+		</tr>
+		<tr>
+			<td>디데이</td>
+			<td>{{list['dday_date']}}</td>
+		</tr>
+		<tr>
+			<td>가입일자</td>
+			<td id="joinDate"></td>
+		</tr>
+
+	</table>
+</form>
+<br />
+<br />
+<input type="button" class="mod_button" value="내 정보 수정" onclick="location.href='mymod'" />
+<input type="button" class="mod_button" value="탈퇴하기" onclick="quit()" />
+
+{% endblock %}

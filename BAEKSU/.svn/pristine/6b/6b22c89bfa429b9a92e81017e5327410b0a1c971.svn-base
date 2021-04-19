@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+<script type="text/javascript">
+	$(document).ready(function() {
+
+	});
+
+	function fn_detail(notice_seq) {
+		location.href = "notice_detail?notice_seq=" + notice_seq;
+	}
+</script>
+<style>
+	 * {
+	 	text-decoration: none;
+	 	text-align: center;
+	 }
+	
+	#notice_list {
+		margin : 200px auto;
+		height: auto;
+		width : 80%; 
+		border-collapse: collapse;
+ 	}
+ 	
+ 	.notice_link:hover {
+ 		cursor: pointer;
+		background-color: #cccccc; 
+		color: black;
+ 	}
+ 	
+ 	th, td {
+ 		padding: 20px;
+ 	}
+
+	.a, #notice_list {
+	 	color: #757575;
+	}
+ 
+</style>
+
+
+<table id="notice_list">
+	<tr>
+		<th>순번</th>
+		<th>제목</th>
+		<th>등록일</th>
+	</tr>
+
+	{% for s in list %}
+	<tr class="notice_link">
+		<td>{{s.rnum}}</td>
+		<td><a href="javascript:fn_detail('{{s.notice_seq}}')">{{s.notice_title}}</a></td>
+		<td>{{s.in_date}}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

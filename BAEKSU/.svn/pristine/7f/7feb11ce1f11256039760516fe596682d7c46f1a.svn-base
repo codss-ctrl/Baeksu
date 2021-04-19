@@ -1,0 +1,125 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+<style>
+#pricecal label {
+	display: inline-block;
+	height: 30px;
+	width: 80px;
+}
+
+#pricecal input[type~=text] {
+	width: 200px;
+	height: 30px;
+}
+
+#calbt {
+	width: 281px;
+	height: 30px;
+	margin-top: 15px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 900;
+	background: rgb(0, 128, 64);
+	border: 1px solid rgb(0, 128, 64);
+	border-radius: 5px;
+	color: rgb(255, 255, 255);
+}
+
+#result {
+	width: 950px;
+	height: 500px;
+	background: 1px solid rgb(0, 128, 64);
+}
+
+#total-font {
+	font-size: 20px;
+	color: red;
+	font-weight : bold;
+}
+
+#title{
+	font-size: 30px;
+	color: black;
+	font-weight : bold;
+}
+
+#all{
+
+text-align: center;
+
+}
+</style>
+<form name="pricecal" id="pricecal">
+	<div id="all">
+		</br></br></br></br></br></br>
+		<p id="title"> 백수탈출 연봉계산기 </p>
+			<label for="yearprice">연봉 :</label> <input type="text" id="yearprice"></br> <label for="none_tax">비과세액 :</label> <input type="text" id="none_tax"></br>
+			<button onclick="cal(); return false;" id="calbt">계산하기</button>
+
+		</p>
+		</br>
+		</br>
+		<p id="total-font">❤ 나의 예상 실수령액은? ❤</p>
+		</br>
+		</p>
+
+		<div id="result" text-align="center"></div>
+	</div>
+</form>
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	function priceToString(price) {
+		return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+
+	function cal() {
+
+		var yearprice = $("#yearprice").val();
+		var none_tax = $("#none_tax").val();
+		var resoltdv;
+
+		var monthprice = yearprice / 12;
+		if (none_tax > 0) {
+			monthprice = monthprice - none_tax;
+		} else {
+			monthprice;
+		}
+
+		var n_pension = Math.ceil(monthprice * 0.045) //국민연금
+		var h_insurance = Math.ceil(monthprice * 0.0343) //건강보험
+		var n_insurance = Math.ceil(h_insurance * 0.1152) //요양보험
+		var e_insurance = Math.ceil(monthprice * 0.008) //고용보험
+		var earned_income_tax; //근로소득세
+		if (monthprice < 100000) {
+			earned_income_tax = 0;
+		} else {
+			earned_income_tax = Math.ceil(monthprice * 0.0813)
+		}
+		var local_tax = Math.ceil(earned_income_tax * 0.10) //지방소득세
+
+		var totalmonthprice = Math.ceil(monthprice - n_pension - h_insurance
+				- n_insurance - e_insurance - earned_income_tax - local_tax) //월 환산 금액
+		var yeartotalprice = Math.ceil(totalmonthprice * 12) //년 예상 실수령액
+
+		result = "국민연금(4.5%) : " + priceToString(n_pension) + "원</br>";
+		result += "</br>"
+		result += "건강보험(3.43%) : " + priceToString(h_insurance) + "원</br>";
+		result += "</br>"
+		result += " - 요양보험(11.52%) : " + priceToString(n_insurance) + "원</br>";
+		result += "</br>"
+		result += "고용보험(0.8%): " + priceToString(e_insurance) + "원</br>";
+		result += "</br>"
+		result += "근로소득세(간이세액) : " + priceToString(earned_income_tax)
+				+ "원</br>";
+		result += "</br>"
+		result += "지방소득세(10%) : " + priceToString(local_tax) + "원</br>";
+		result += "</br>"
+		result += "월 환산금액 : " + priceToString(totalmonthprice) + "원</br>";
+		result += "</br>"
+		result += "년 예상 실수령액 : " + priceToString(yeartotalprice) + "원</br>";
+		$("#result").html(result);
+	}
+</script>
+
+{% endblock %}

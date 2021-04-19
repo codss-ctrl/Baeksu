@@ -1,0 +1,10 @@
+{% extends 'layout_admin.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+
+
+
+
+
+{% endblock %} 

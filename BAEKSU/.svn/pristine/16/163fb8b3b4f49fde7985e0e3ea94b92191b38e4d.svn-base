@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+
+	<select id="select_myplan">
+		select  
+			plan_seq,
+			plan_title,
+			plan_content,
+			plan_date, 
+			in_user_id 
+		from 
+			plan
+		where 
+			in_user_id=:1  
+	</select>
+ 
+	<select id="select_detail">
+		SELECT  
+			PLAN_SEQ,
+			PLAN_TITLE,
+			PLAN_CONTENT,
+			PLAN_DATE, 
+			IN_USER_ID 
+		from 
+			plan
+		where 
+			PLAN_SEQ=:1  
+	</select>
+ 
+ 
+	<update id="insert">
+		insert into 
+		plan
+		(
+			plan_seq,
+			plan_title,
+			plan_content,
+			plan_date, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(	
+			plan_seq.nextval,
+			:1, 
+			:2, 
+			:3, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),  
+			:4, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+			:5
+		)
+	</update>
+			
+	<update id="update">
+		update 
+			PLAN 
+		set 
+			plan_title	=:1,
+			plan_content=:2, 
+			UP_DATE		=to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			UP_user_id	=:3
+		where 
+			plan_seq	=:4
+		AND in_user_id	=:5
+			 
+	</update>
+	<update id="delete">
+		delete 
+			PLAN  
+		where 
+			plan_seq = :1
+	</update>
+</mapper>

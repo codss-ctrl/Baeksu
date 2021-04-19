@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+
+ 
+	
+	
+	<update id="kakao_merge">
+	MERGE INTO member
+	USING dual
+	on ( mem_id = :1 )
+	WHEN MATCHED THEN
+	UPDATE SET
+  		mem_name 	= :2,
+		up_date		= to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+		up_user_id	= :3
+	WHEN NOT MATCHED THEN
+		insert (
+				mem_id,
+				mem_name,
+				mem_pass,
+				mem_mail,
+				mem_job,
+				dday_title, 
+				dday_date, 
+				del_yn,
+				in_user_id,
+				up_user_id,
+				in_date,
+				up_date
+		) 
+		values 
+		(
+				:4,
+				:5,
+				1,
+				:6,
+				:7,
+				:8, 
+				to_char(sysdate, 'YYYY-MM-DD'), 
+				'N',
+				:9,
+				:9,
+				to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+				to_char(sysdate, 'YYYYMMDD.HH24MISS')
+		)
+	</update>
+	
+	
+
+
+	<select id="member_cnt">
+		select 
+			count(*) mem_cnt
+		from 
+			member 
+	</select>
+
+	<select id="select">
+		select 
+			mem_id, 
+			mem_name, 
+			mem_pass, 
+			mem_mail, 
+			mem_job, 
+			dday_title, 
+			dday_date, 
+			del_yn,
+			in_date
+		from 
+			member
+	</select>
+	
+	<select id="select_dupl_id">
+		SELECT 
+			mem_id,
+			mem_pass,
+			mem_mail 
+		from 
+			member
+		where 
+			mem_id=:1
+	</select>
+	
+	<select id="select_dupl_email">
+		SELECT 
+			mem_id,
+			mem_name,
+			mem_mail 
+		from 
+			member
+		where 
+			mem_mail=:1
+	</select>
+	
+	<select id="select_login">
+		SELECT  
+			mem_id,
+			mem_name,
+			mem_pass,
+			mem_mail, 
+			mem_job, 
+			dday_title, 
+			dday_date,
+			del_yn
+		from 
+			member
+		where 
+			mem_id=:1 and
+			mem_pass=:2
+		
+	</select>
+	
+	<select id="select_mypage">
+		SELECT  
+			mem_id,
+			mem_name,
+			mem_pass,
+			mem_mail, 
+			mem_job, 
+			dday_title, 
+			dday_date,
+			in_date
+		from 
+			member
+		where 
+			mem_id=:1  
+	</select>
+	
+	<select id="select_mydday_title">
+		SELECT  
+			dday_title
+		from 
+			member
+		where 
+			mem_id=:1  
+	</select>
+	
+	<select id="select_mydday_date">
+	
+		SELECT  
+			round(to_date(DDAY_DATE) -sysdate)+1 dday_date
+		from 
+			member
+		where 
+			mem_id=:1 
+	</select>
+	
+	<update id="set_temp_pass">
+		update 
+			member 
+		set 
+			mem_pass=:1, 
+			UP_DATE=to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			UP_user_id=:2
+		where 
+			mem_id=:3
+	</update>
+
+	<update id="insert">
+		insert into 
+		member
+		(
+			mem_id, 
+			mem_name, 
+			mem_pass, 
+			mem_mail, 
+			mem_job, 
+			dday_title, 
+			dday_date, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(
+			:1, 
+			:2, 
+			:3, 
+			:4, 
+			:5, 
+			:6, 
+			:7, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),  
+			:8,
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'),
+			:9 
+		)
+	</update>
+	
+	<update id="update_mod">
+		update 
+			member 
+		set 
+			mem_name=:1, 
+			mem_mail=:2, 
+			mem_job=:3, 
+			up_date=to_char(sysdate, 'yyyymmdd.hh24miss')
+		where 
+			mem_id=:4
+	</update>
+	
+	
+	<update id="update">
+		update 
+			member 
+		set 
+			mem_name=:1, 
+			mem_pass=:2, 
+			mem_mail=:3, 
+			mem_job=:4, 
+			dday_title=:5, 
+			dday_date=:6, 
+			up_date=to_char(sysdate, 'yyyymmdd.hh24miss'), 
+			up_user_id=:7 
+		where 
+			mem_id=:8
+	</update>
+	<update id="delete">
+		update 
+			member 
+		set 
+			del_yn = 'Y'
+		where 
+			mem_id = :1
+	</update>
+	
+	<update id="user_yn">
+		update 
+			member 
+		set 
+			del_yn = 'D'
+		where 
+			mem_id = :1
+	</update>
+	
+	<update id="user_act">
+		update 
+			member 
+		set 
+			del_yn = 'N'
+		where 
+			mem_id = :1
+	</update>
+	
+</mapper>

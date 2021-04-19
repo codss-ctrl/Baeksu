@@ -1,0 +1,269 @@
+{%if mem_id =="admin" %}
+{% extends 'layout_admin.html' %}
+{%else%}
+{% extends 'layout.html' %}
+{% endif %}
+<meta charset="UTF-8">
+{% block content %}
+<style>
+.board_detail{
+	
+	margin:100px;
+
+}
+
+</style>
+<script type="text/javascript">
+
+function fn_mod(){
+	location.href="question_mod?board_seq={{board.board_seq}}"
+			
+}
+function fn_list(){
+	location.href="question_list"
+}
+function fn_del(){
+	var flag_del = confirm("삭제하시겠습니까?")
+	if(flag_del){
+		location.href="question_delact?board_seq={{board.board_seq}}"
+	}
+}
+function fn_cmtadd(){
+
+	var cmt_content = $("textarea[name=cmt_content]").val();
+    var board_seq = '{{board.board_seq}}'
+	
+    if (cmt_content =='') {
+    	alert('내용을 입력해주세요.')	
+    	$("textarea[name=cmt_content]").focus();
+    	return;
+    }
+    
+	var param = "";
+	param += "dummy=" + Math.random();
+	param += "&cmt_content=" + cmt_content;
+	param += "&board_seq=" + board_seq;
+	
+	$.ajax({
+	   url : "cmt_add.ajax",
+	   data : param,
+	   dataType : "json",
+	   type : "post",
+	   async : false,
+	   statusCode : {
+	      404 : function() {
+	         alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+	      }
+	   },
+	   success : function(data) {
+	      if(data.msg == "ok"){
+	    	 alert("등록완료");
+	         location.reload();
+	      } else{
+	         alert("댓글 작성 도중 문제가 생겼습니다")
+	      }
+	   }
+	});
+}
+function fn_cmtdel(cmt_seq){
+    var board_seq = '{{board.board_seq}}'
+	
+	var param = "";
+	param += "dummy=" + Math.random();
+	param += "&cmt_seq=" + cmt_seq;
+	param += "&board_seq=" + board_seq;
+	
+	$.ajax({
+	   url : "cmt_del.ajax",
+	   data : param,
+	   dataType : "json",
+	   type : "post",
+	   async : false,
+	   statusCode : {
+	      404 : function() {
+	         alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+	      }
+	   },
+	   success : function(data) {
+	      if(data.msg == "ok"){
+	    	  alert("삭제완료");
+	         location.reload();
+	      	
+	      } else{
+	         alert("댓글 삭제 도중 문제가 생겼습니다")
+	      }
+	   }
+	});
+}
+
+$(function() {
+    $('#reply_cmt').html(
+          $('#reply_cmt').html().replaceAll('\r', '').replaceAll('\n',
+                '<br>'))
+ })
+</script>  
+
+<style>
+ .board_button {
+	font-size: 12px;
+	cursor: pointer;
+	background-color: #269463;
+	color: white;
+	border: 1px solid #269463;
+}
+
+</style>
+  <section class="board_detail">
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      건의사항
+    </div>
+  </header>
+
+  <!-- Page Heading -->
+  <div class="page-heading">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>{{board.board_title}}</h1>
+          <h5>{{board.in_date}}</h5>
+          <span>{{board.in_user_id}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Post -->
+  <section class="simple-post">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+        {% if board.attach_file %}
+        	{% set item1, item2 = board.attach_file.split('.') %}
+         	{% if item2 == 'png' or item2 == 'PNG' or item2 == 'jpg' or item2 == 'JPG' or item2 == 'jfif' or item2 == 'JFIF' %}
+         		<span><img src="download?attach_file={{board.attach_file}}&attach_path={{board.attach_path}}" width="600" alt="" ></span>
+		  	{% else %}
+				<span><a href="download?attach_file={{board.attach_file}}&attach_path={{board.attach_path}}">{{board.attach_file}}</a></span>
+            {% endif %}
+        {% endif %}    
+        </div>    
+        <div class="down-content">
+            <p>{{board.board_content}}</p>
+         </div>
+      </div>
+    </div>
+   </section> 
+   
+   
+  <section class="simple-post">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="assets/images/simple-post.jpg" alt="">
+          
+          
+          <div class="down-content">
+             <span><input type="button" class="board_button" value="목록으로" onclick="fn_list()" /></span>
+			{% if session.mem_id == 'admin' %}
+			 <span><input type="button" class="board_button" value="수정하기" onclick="fn_mod()" /></span>
+			 {% endif %}
+			 {% if session.mem_id %}
+			 <span><input type="button" class="board_button" value="삭제하기" onclick="fn_del()" /></span>
+			  {% endif %}
+          </div>
+          <hr>
+          <div id ="cmt_title"> <b>[관리자 답변]</b> </div>
+		  <table id = "cmt_list" border="0">
+		     {% for s in list %}
+			 <tr>
+				 <td id ="reply_cmt"> {{s.cmt_content}} </td>
+				 {% if session.mem_id ==  'admin' %}
+				 <td style="width: 10px;"><input type="button" class="board_button" value="삭제하기" onclick="fn_cmtdel({{s.cmt_seq}})"/></td>
+				 {%endif%}
+			 </tr>
+		     {% endfor %}
+			</table>
+            {% if session.mem_id ==  'admin' %}
+			  <div class="reply"></div>
+				<textarea style="width:98%; height: 98%" name = "cmt_content" ></textarea>
+				<span><input type="button" class="board_button" style="float:right; margin-right: 15px;" value="등록하기" onclick="fn_cmtadd()"></span>
+			 </div>
+			{% endif %}
+        </div>
+      </div>
+  </section>
+</section>          
+
+
+<!-- <table id="question_detail" border="1"> -->
+
+<!--   <tr> -->
+<!-- 	<th class="memo_title">제목</th> -->
+<!-- 	<td> -->
+<!-- 	{{board.board_title}} -->
+<!-- 	</td> -->
+<!--   </tr> -->
+<!--   <tr> -->
+<!-- 	<th class="memo_title">작성자</th> -->
+<!-- 	<td> -->
+<!-- 	{{board.in_user_id}} -->
+<!-- 	</td> -->
+<!--   </tr> -->
+<!--   <tr> -->
+<!-- 	<th>등록일</th> -->
+<!-- 	<td> {{board.in_date}}</td> -->
+<!--   </tr> -->
+<!--    <tr> -->
+<!-- 	<th>첨부파일</th> -->
+<!-- 	<td> -->
+<!-- 	{% if board.attach_file %} -->
+<!-- 		<a href="download?attach_file={{board.attach_file}}&attach_path={{board.attach_path}}">{{board.attach_file}}</a> -->
+<!-- 		<img src="download?attach_file={{board.attach_file}}&attach_path={{board.attach_path}}" width="40px" > -->
+<!-- 	{%else%} -->
+<!-- 	첨부파일 x -->
+<!-- 	{% endif %} -->
+<!-- 	</td> -->
+<!--   </tr> -->
+<!--   <tr> -->
+<!-- 	<th>내용</th> -->
+<!-- 	<td><pre> -->
+<!-- 	{{board.board_content}} -->
+<!-- 	</pre></td> -->
+<!--   </tr> -->
+<!--   <tr> -->
+<!-- 	<th colspan="2"> -->
+<!-- 	{% if session.mem_id != 'admin' %} -->
+<!-- 	 <input type="button" class="button" value="수정하기" onclick="fn_mod()"/> -->
+<!-- 	 {% endif %} -->
+<!-- 	 <input type="button" class="button" value="목록으로" onclick="fn_list()" /> -->
+<!-- 	 <input type="button" class="button" value="삭제하기" onclick="fn_del()" /> -->
+	
+<!-- 	</th>  -->
+<!--   </tr> -->
+<!--  </table> -->
+<!--  <div id ="cmt_title">관리자 답변 </div> -->
+<!--  <table id = "cmt_list" border="1"> -->
+<!--      {% for s in list %} -->
+<!-- 	 <tr> -->
+<!-- 		 <td id ="reply_cmt"> {{s.cmt_content}} </td> -->
+<!-- 		 {% if session.mem_id ==  'admin' %} -->
+<!-- 		 <td style="width: 10px;"><input type="button" value="삭제" onclick="fn_cmtdel({{s.cmt_seq}})"/></td> -->
+<!-- 		 {%endif%} -->
+<!-- 	 </tr> -->
+<!--      {% endfor %} -->
+	 
+<!--  </table> -->
+<!-- 	{% if session.mem_id ==  'admin' %} -->
+<!-- 	  <table id = "cmt_text" border="1"> -->
+<!-- 		 <tr> -->
+<!-- 			 <td> -->
+<!-- 			 	<textarea style="width:98%; height: 98%" name = "cmt_content" ></textarea></testarea> -->
+<!-- 			 </td> -->
+<!-- 			 <td style = "width:10px;"> -->
+<!-- 				 <input type="button" value="등록" onclick="fn_cmtadd()"> -->
+<!-- 			</td> -->
+<!-- 		 </tr> -->
+<!-- 	 </table> -->
+<!-- 	 {% endif %} -->
+{% endblock %} 

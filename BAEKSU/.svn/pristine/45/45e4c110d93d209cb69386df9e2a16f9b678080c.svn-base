@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+ <script src="js/jquery-3.5.1.js"></script>
+ <script>
+	$(document).ready(function(){ 
+		$("#info_id").hide(); 
+	})
+	
+	function fn_find_id(){
+		var mem_mail = $("#mem_mail").val();
+		 
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&mem_mail="+mem_mail;
+		
+		$.ajax({
+			url : "find_id.ajax",
+			data : param,
+			dataType : "json",
+			type : "get",
+			async: false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				},
+				500 : function() {
+					alert("존재하지 않는 이메일입니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					$("#info_id").show(); 
+					$('#find_id').html(data.mem_id); 
+					console.log(data.mem_id);
+				} else {
+					alert("처리 도중 문제가 생겼습니다.");
+				}
+			}
+		});
+	}	
+
+	function fn_find_pass(){
+		var mem_id = $("#mem_id").val();
+		 
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&mem_id="+mem_id;
+		
+		$.ajax({
+			url : "find_pass.ajax",
+			data : param,
+			dataType : "json",
+			type : "get",
+			async: false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				},
+				500 : function() {
+					alert("존재하지 않는 아이디입니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					console.log(data.mem_id);
+					alert("이메일로 임시 비밀번호가 전송되었습니다.");
+				} else {
+					alert("처리 도중 문제가 생겼습니다.");
+				}
+			}
+		});
+	}	
+	
+	
+ </script>
+
+ <table id="find_info">
+   <tr class="tr_height">
+     <th>아이디 찾기</th>	
+     <th>비밀번호 찾기</th>	
+   </tr>
+   
+   <tr class="tr_height">
+	 <td>
+	   <input type="text" name="mem_mail" id="mem_mail" placeholder="example@naver.com" >
+	 </td>
+	 <td>
+	   <input type="text" name="mem_id" id="mem_id" placeholder="ID">
+	 </td>
+   </tr>
+   
+   <tr class="tr_height">
+     <td><input type="button" value="아이디 찾기" onclick="fn_find_id()"></td>
+     <td><input type="button" value="비밀번호 찾기" onclick="fn_find_pass()"></td>
+   </tr>
+ </table>
+ 
+ <div id="info_id">
+ 	당신의 아이디는 <span id="find_id"></span> 입니다. <br />
+ </div>
+
+{% endblock %} 

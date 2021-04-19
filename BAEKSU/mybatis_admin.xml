@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+
+	<update id="insert">
+		insert into admin
+		(
+			admin_id,
+			admin_pass
+		) 
+		values
+		(
+			:1, 
+			:2 
+		)
+	</update>
+
+
+
+	<select id="select_admin_dupl_id">
+		SELECT 
+			admin_id,
+			admin_pass 
+		from 
+			admin
+		where 
+			admin_id=:1
+	</select>
+	
+	
+	<select id="select_login">
+		SELECT  
+			admin_id,
+			admin_pass
+			
+		from 
+			admin
+		where 
+			admin_id=:1 and
+			admin_pass=:2
+		
+	</select>
+	
+	<update id="delete">
+		delete from admin where admin_id = :1
+	</update>
+</mapper>

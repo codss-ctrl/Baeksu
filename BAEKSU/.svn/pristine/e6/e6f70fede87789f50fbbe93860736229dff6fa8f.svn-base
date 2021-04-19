@@ -1,0 +1,127 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+
+	function fn_mod(){
+		document.question_send.submit();
+	}
+	function fn_list(){
+		location.href="question_list"
+	}
+	
+	function fn_del_ajax(){
+		console.log("del");
+		var board_seq = $('input[name=board_seq]').val();
+		console.log(board_seq);
+		var param = ""
+		param +="dummy="+Math.random();
+		param +="&board_seq="+board_seq;
+		
+		$.ajax({
+			url : "board_del.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					location.href = "question_mod?board_seq={{notice.board_seq}}"
+				} else{
+					alert("삭제 도중 문제가 생겼습니다")
+				}
+				console.log(data.msg)
+			}
+		});
+	}
+
+</script>
+
+	<style>
+
+	#question_mod{
+		width : 80%;
+		margin: 200px auto 0px;
+		border-collapse: collapse;
+		border: 1px solid black;
+	}
+	#board_title {
+		width: 100%;
+	}
+	.board_set_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+	
+	#after_file {
+		font-size: 12px;
+	}
+
+</style>
+
+
+
+
+
+
+
+<form name="question_send" action="question_modact" method="post" enctype="multipart/form-data">
+<input type="hidden" name="board_seq" value="{{notice.board_seq}}">
+<input type="hidden" name="attach_file" value="{{notice.attach_file}}">
+<input type="hidden" name="attach_path" value="{{notice.attach_path}}">
+	<table id="question_mod" border="1">
+		<tr>
+			<th >번호</th>
+			<td>{{notice.board_seq}}</td>
+		</tr>
+		<tr>
+			<th >제목</th>
+			<td>
+				<input type = "text" id="board_title" name="board_title" value="{{notice.board_title}}"/>
+			</td>
+		</tr>
+		<tr>
+			<th>등록일</th>
+			<td>{{notice.in_date}}</td>
+		</tr>
+		<tr>
+			<th>첨부파일</th>
+			<td>
+				{%if notice.attach_file %}
+				<input id="after_file" type="file" name="file" />
+				<a href ="javascript:fn_del_ajax()">{{notice.attach_path}} x </a>
+				{% else %}
+				<input type="file" name = "file"/>
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<th >내용</th>
+			<td>
+			<textarea rows="20" cols="80" name="board_content" >{{notice.board_content}}</textarea>
+	
+	</td>
+		</tr>
+		<tr>
+			<th colspan="2">
+			<input type="button" class="board_set_button" value="수정완료" onclick="fn_mod()"> 
+			<input type="button" class="board_set_button" value="목록" onclick="fn_list()">
+			</th>
+		</tr>
+	</table>
+
+</form>
+
+
+
+
+{% endblock %}

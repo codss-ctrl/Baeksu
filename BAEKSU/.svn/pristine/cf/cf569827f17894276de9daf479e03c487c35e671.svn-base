@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+	<select id="select_search">
+		select 
+			after_seq, 
+			after_title, 
+			after_content, 
+			attach_file, 
+			attach_path, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+ 		from 
+ 			after 
+ 		where
+ 			after_title like '%'||:1||'%'
+ 		or 	after_content like '%'||:1||'%'
+ 		order by 
+ 			after_seq desc
+	</select>
+
+
+	<select id="select">
+		select 
+			after_seq, 
+			after_title, 
+			after_content, 
+			attach_file, 
+			attach_path, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+ 		from 
+ 			after 
+ 		where
+ 			after_seq= :1	
+	</select>	
+	<select id="select_list">
+		select 
+			after_seq, 
+			after_title, 
+			after_content, 
+			attach_file, 
+			attach_path, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+ 		from 
+ 			after 
+ 			
+	</select>	
+	
+	<update id="insert">
+		insert into after 
+		(
+			after_seq, 
+			after_title, 
+			after_content, 
+			attach_file, 
+			attach_path, 
+			in_date, 
+			in_user_id, 
+			up_date, 
+			up_user_id
+		) 
+		values
+		(	
+			after_seq.nextval,
+			:1, 
+			:2, 
+			:3, 
+			:4, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:5, 
+			to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			:6
+		)
+	</update>
+	<update id="update">
+		update 
+			after 
+		set 
+			after_title			=:1, 
+			after_content		=:2, 
+			attach_file			=:3, 
+			attach_path			=:4, 
+			up_date				= to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+			up_user_id			=:5
+		where 
+			after_seq=:6
+	</update>
+	
+	<update id="del_img">
+		update 
+			after 
+		set 
+			attach_file			= '', 
+			attach_path			= '',
+			up_date				= to_char(sysdate, 'YYYYMMDD.HH24MISS')
+		where 
+			after_seq=:1
+	</update>
+	
+	
+	<update id="delete">
+		delete from after 
+		where 
+			after_seq= :1
+	</update>
+</mapper>

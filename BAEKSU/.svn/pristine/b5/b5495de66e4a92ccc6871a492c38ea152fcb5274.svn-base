@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+
+<script type="text/javascript">
+
+	var cnt = '{{cnt}}'	
+	var mem_id = '{{mem_id}}'	
+	if(cnt =='1'){
+		alert("정상적으로 수정되었습니다");
+		location.href="user_set?mem_id="+mem_id
+	}else{
+		alert("수정도중 오류");
+		history.back();
+	}
+
+	
+	</script>
+
+      
+{% endblock %}

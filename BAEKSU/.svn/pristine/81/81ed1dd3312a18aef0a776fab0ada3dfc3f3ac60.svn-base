@@ -1,0 +1,136 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+ 
+<style>
+	#my_info {
+		border-collapse: collapse;
+	}
+</style>
+<script src="js/jquery-3.5.1.js"></script>
+<script>
+	window.onload = function(){
+		var temp = "{{list['in_date']}}";
+		var yyyy = temp.substring(0, 4);
+		var mm = temp.substring(4, 6);
+		var dd = temp.substring(6, 8);
+		document.getElementById('joinDate').innerHTML = yyyy+"-"+mm+"-"+dd;
+	}
+	
+	function quit(){
+		var flag_del = confirm("탈퇴 후 같은 아이디로 재가입이 불가능합니다. \n탈퇴하시겠습니까?");
+		
+		var mem_id = $("#mem_id").html(); 
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&mem_id="+mem_id; 
+
+		console.log(param)
+		
+		if (flag_del) {
+			
+			$.ajax({
+				url : "quit.ajax",
+				data : param,
+				dataType : "json",
+				type : "get",
+				async: false,
+				success : function(data) {
+					if(data.msg == "ok"){
+	 					alert("어어 됐다")
+						location.href="main_view";
+					} else {
+						alert("처리 도중 오류가 발생했습니다. 관리자에게 문의해주세요.");
+					}
+				}
+			});
+		} else {
+			console.log("탈퇴안할래")
+		}
+	}		
+	
+</script>
+
+ <style>
+ 	 * {
+	 	text-decoration: none;
+	 	text-align: center;
+	 }
+	
+	#my_info {
+		margin : 0 auto;
+		height: auto;
+		width : 80%; 
+	 	color: #757575;
+		border-collapse: collapse;
+ 	}
+ 	
+ 	a:hover {
+ 		cursor:pointer;
+ 	}
+ 	
+ 	th, td {
+ 		padding: 20px;
+ 	}
+ .search_button {
+	font-size: 12px;
+	cursor: pointer;
+	background-color: #269463;
+	color: white;
+	border: 1px solid #269463;
+}
+ 
+	 .mod_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+
+	#mypage {
+		width : 150px;
+		margin: 100px 0px 0px 0px;
+		text-align: center;
+	}
+ 	
+ </style>
+
+<img id="mypage" src=image/mypage.png>
+<br /><br />
+ <form action="">
+	<table border='1' id="my_info">
+		<tr>
+			<td>아이디</td>
+			<td id="mem_id">{{list['mem_id']}}</td>
+		</tr>
+		<tr>
+			<td>이름</td>
+			<td>{{list['mem_name']}}</td>
+		</tr>
+		<tr>
+			<td>직종</td>
+			<td>{{list['mem_job']}}</td>
+		</tr>
+		<tr>
+			<td>디데이명</td>
+			<td>{{list['dday_title']}}</td>
+		</tr>
+		<tr>
+			<td>디데이</td>
+			<td>{{list['dday_date']}}</td>
+		</tr>
+		<tr>
+			<td>가입일자</td>
+			<td id="joinDate"></td>
+		</tr>
+	
+	</table>
+ </form>
+<br /><br />
+<input type="button" class="mod_button" value="내 정보 수정"  onclick="location.href='mymod'" />
+<input type="button" class="mod_button" value="탈퇴하기"  onclick="quit()" />
+
+
+
+{% endblock %} 

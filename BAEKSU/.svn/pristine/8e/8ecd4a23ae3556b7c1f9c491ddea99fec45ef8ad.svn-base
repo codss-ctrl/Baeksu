@@ -1,0 +1,105 @@
+@charset "UTF-8";
+
+* {
+	text-decoration: none;
+}
+
+th, td {
+	padding: 20px;
+}
+
+.after_detail{
+	margin:100px;
+}
+#info_id {
+	margin: 0px auto;
+}
+#join_form{
+	margin: 200px auto;
+}
+#find_info {
+	margin: 200px auto 50px;
+}
+#after_title, .answer_text_box, #plan_title, .notice_text_box  {
+	width: 100%;
+}
+#answer_repl, #mem_job, #scrap_repl, #after_file  {
+	font-size: 12px;
+}
+.answermenu_bar, #jobmenu_bar, .aftermenu_bar, .boardmenu_bar {
+	margin: 200px auto 0px 0px;
+	text-align: center;
+}
+#calendar {
+	width: 800px;
+	height: 700px;
+	border-collapse: collapse;
+}
+.after_link:hover, .job_link:hover, .board_link:hover {
+	color: black;
+	cursor: pointer;
+	background-color: #cccccc; 
+}
+#bot_tel {
+	color: green;
+	font-size: 10px;
+	text-align: center;
+}
+#answer_info, #scrap_info {
+	margin : 0px auto;
+	font-size: 30px;
+	text-align: center;
+}
+#mypage {
+	width : 150px;
+	margin: 100px 0px 0px 0px;
+	text-align: center;
+}
+#answer_mod, #after_add, #cal_mod, #notice_mod{
+	width : 80%;
+	margin: 200px auto 0px;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+#chatbox, #bot_info {
+	text-align: center;
+	margin: 200px auto;
+	width : 60%;
+	text-align: center;
+}
+#bot_question{
+	margin: auto;
+	vertical-align: middle;
+	font-size: 30px;
+	text-align: center;
+}
+.search_bar {
+	font-size: 12px;
+	background-color: white;
+	color: black;
+	border: 1px solid #888888;
+}
+.write_button {
+	font-size: 12px;
+	cursor: pointer;
+	background-color: white;
+	color: black;
+	border: 1px solid #888888;
+}
+.search_button, .write_button, .down_button, .answer_button, .answer_set_button, .find_button, .add_button,
+.del_button, .after_button, .after_set_button, .cal_set_button, .mod_button, .notice_set_button {
+	font-size: 12px;
+	cursor: pointer;
+	background-color: #269463;
+	color: white;
+	border: 1px solid #269463;
+}
+
+#answer_list, #job_list, #my_info, #question_list, #after_list  {
+	margin: 0px auto;
+	height: auto;
+	width: 80%;
+ 	color: #757575;
+	border-collapse: collapse;
+}
+

@@ -1,0 +1,10 @@
+{% extends 'layout_admin.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+ 
+ <iframe id="stat" frameborder='0' width="330px" height="300px" src="statistics">
+ </iframe>
+
+
+{% endblock %} 

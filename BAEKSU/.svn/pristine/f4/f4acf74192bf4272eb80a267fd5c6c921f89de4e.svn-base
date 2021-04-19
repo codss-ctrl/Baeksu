@@ -1,0 +1,106 @@
+<!-- yj.test -->
+{%if mem_id=='admin' %}
+{% extends 'layout_admin.html' %}
+{% else %}
+{% extends 'layout.html' %}
+{% endif %}
+<meta charset="UTF-8">
+{% block content %}
+<script type="text/javascript">
+	function fn_add() {
+		location.href = "question_add";
+	}
+
+	function fn_detail(board_seq) {
+		location.href = "question_detail?board_seq=" + board_seq
+	}
+
+	function fn_search() {
+		var search = $("#search").val();
+		location.href = "question_list?search=" + search;
+	}
+	function fn_keypress(e) {
+		if (e.key == "Enter") {
+			fn_search();
+		}
+	}
+</script>
+
+<style>
+* {
+	text-decoration: none;
+	text-align: center;
+}
+ 
+.search_bar {
+	font-size: 12px;
+	background-color: white;
+	color: black;
+	border: 1px solid #888888;
+}
+
+#question_list {
+	margin: 0px auto;
+	height: auto;
+	width: 80%;
+ 	color: #757575;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 20px;
+}
+
+.boardmenu_bar {
+	margin: 200px auto 0px 0px;
+	text-align: center;
+}
+
+
+	 .search_button, .write_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+
+  	.board_link:hover {
+ 		cursor: pointer;
+		background-color: #cccccc; 
+		color: black;
+ 	}
+ 
+ 
+</style>
+
+	<div class="boardmenu_bar">
+	 <input type="text" class="search_bar" placeholder="이곳에 검색어를 입력하세요" onkeypress="fn_keypress(event)" value="{{search}}"> 
+ 	 <input type="button" class="search_button" onclick="fn_search()" value="검색"> {% if session.mem_id != 'admin' %}<input type="button" class="write_button" value="글쓰기" onclick="fn_add()">
+	 {%endif%} 
+	
+	</div>
+<table id="question_list">
+
+	<tr>
+		<th>순번</th>
+		<th>제목</th>
+		<th>작성자</th>
+		<th>첨부파일</th>
+		<th>등록일</th>
+	</tr>
+
+	<tbody>
+		{% for idx, s in enumerate(list) %}
+		<tr class="board_link">
+			<td>{{idx+1}}</td>
+			<td><a href="javascript:fn_detail('{{s.board_seq}}')">{{s.board_title}}</a></td>
+			<td>{{s.in_user_id}}</td>
+			<td>{% if s.attach_file %} o {%else%} x {% endif %}</td>
+			<td>{{s.in_date}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

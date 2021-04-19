@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+ 
+<link rel="stylesheet" href="css/common.css">
+<script type="text/javascript"> 
+
+	function fn_list(){
+		location.href="after_list"
+	}
+	function fn_mod(){
+		location.href="after_mod?after_seq={{after.after_seq}}"
+	}
+	function fn_del(){
+		var after_seq = $("input[name=after_seq]").val();
+		
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&after_seq=" + after_seq;
+		var flag_ok =confirm("한번 삭제된 자료는 복구가 불가합니다. 그래도 하시겠습니까?");
+		
+			if(flag_ok){
+				$.ajax({
+					url : "after_del.ajax",
+					data : param,
+					dataType : "json",
+					type : "post",
+					async : false,
+					statusCode : {
+						404 : function() {
+							alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+						}
+					},
+					success : function(data) {
+						if(data.msg == "ok"){
+							location.href = "after_list";
+						} else{
+							alert("삭제 도중 문제가 생겼습니다")
+						}
+					}
+				});
+				
+			}
+	} 
+</script>
+
+<section class="after_detail">
+  <!-- Header -->
+  <header id="header">
+    <div class="logo">
+      면접후기
+    </div>
+  </header>
+
+  <!-- Page Heading -->
+  <div class="page-heading">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>{{after.after_title}}</h1>
+          <h5>{{after.in_date}}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Post -->
+  <section class="simple-post">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+        {% if after.attach_file %}
+        	{% set item1, item2 = after.attach_path.split('.') %}
+         	{% if item2 == 'png' or item2 == 'PNG' or item2 == 'jpg' or item2 == 'JPG' or item2 == 'JPEG' or item2 == 'jpg' or item2 == 'jfif' or item2 == 'JFIF' %}
+         		<span><img src="download?attach_file={{after.attach_file}}&attach_path={{after.attach_path}}" width="600" alt="" ></span><br/>
+				<span><a href="download?attach_file={{after.attach_file}}&attach_path={{after.attach_path}}">{{after.attach_file}}</a></span>
+		  	{% else %}
+				<span><a href="download?attach_file={{after.attach_file}}&attach_path={{after.attach_path}}">{{after.attach_file}}</a></span>
+            {% endif %}
+        {% endif %}   
+        </div>    
+        <div class="down-content">
+            <pre>{{after.after_content}}</pre>
+         </div>
+      </div>
+    </div>
+   </section> 
+  <section class="simple-post">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <img src="assets/images/simple-post.jpg" alt="">
+          <div class="down-content">
+             <span><input type="button" class="after_button" value="목록으로" onclick="fn_list()" /></span>
+			 {% if session.mem_id == after.in_user_id %}
+			 <span><input type="button" class="after_button" value="수정하기" onclick="fn_mod()" /></span>
+			 <span><input type="button" class="after_button" value="삭제하기" onclick="fn_del()" /></span>
+			 {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>          
+            
+<input type="hidden" name="after_seq" value="{{after.after_seq}}">
+ 
+{% endblock %} 

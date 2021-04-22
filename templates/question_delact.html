@@ -1,0 +1,21 @@
+{% if session.mem_id == 'admin' %}
+{% extends 'layout_admin.html' %}
+{% else %}
+{% extends 'layout.html' %}
+{% endif %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+   var cnt = '{{cnt}}'
+   
+   if(cnt =='1'){
+      alert("정상적으로 삭제되었습니다.");
+      location.href = "question_list"
+   }else{
+      alert("삭제도중 오류가 생겼습니다.");
+      history.back();
+   }
+</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+	var cnt = '{{cnt}}';
+	if(cnt == '1'){
+		location.href = "memo_list"
+	} else {
+		alert("삭제도중 오류가 생겼습니다.");
+		
+	}
+</script>
+
+{% endblock %}
+

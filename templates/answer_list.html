@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<style>
+* {
+	text-decoration: none;
+	text-align: center;
+}
+</style>
+<link rel="stylesheet" href="css/common.css">
+<script type="text/javascript">
+	function fn_detail(answer_seq) {
+		location.href = "answer_detail?answer_seq=" + answer_seq;
+	}
+	function fn_down() {
+		location.href = "answer_download";
+	}
+	function fn_search() {
+		var search = $('#search_bar').val().trim();
+		location.href = "answer_list?search=" + search;
+	}
+</script>
+
+{% if list|length==0 %}
+<br /> <br /><br /><br /><br />
+<div class="answermenu_bar">
+<span id="answer_info">등록된 답변이 존재하지 않습니다.</span> <br />
+<span id="answer_repl">본인만의 면접을 진행해서 답변을 등록해보세요!</span> <br />
+<input class="search_button" type='button' onclick="history.back()" value="뒤로가기"/>
+</div>
+
+{% else %}
+<div class="answermenu_bar">
+<input class="search_bar" id="search_bar" type="text" placeholder="이곳에 검색어를 입력하세요" />
+<input class="search_button" type="button" value="검색" onclick="fn_search()" />
+<input class="down_button" type="button" onclick="fn_down()" value="내 답변 리스트 다운받기" />
+</div>
+
+<table id="answer_list">
+	<tr>
+		<td colspan="3"></td>
+	</tr>
+	<tr>
+		<th>번호</th>
+		<th>제목</th>
+		<th>등록일</th>
+	</tr>
+	{% for idx,s in enumerate(list) %}
+	<tr class="answer_link">
+		<td>{{idx+1}}</td>
+		<td><a href="javascript:fn_detail('{{s.answer_seq}}')">{{s.intrvw_content}}</a></td>
+		<td>{{s.in_date}}</td>
+	</tr>
+	{% endfor %} {% endif %}
+</table>
+
+{% endblock %}

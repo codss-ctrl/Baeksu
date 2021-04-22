@@ -1,0 +1,98 @@
+{% if session.mem_id == 'admin' %}
+{% extends 'layout_admin.html' %}
+{% else %}
+{% extends 'layout.html' %}
+{% endif %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script type="text/javascript">
+function fn_add(){
+	var q_title = $('#q_title').val()
+	var q_writer = $('#q_writer').val()
+	var q_pass = $('#q_pass').val()
+	var q_content = $('#q_content').val()
+
+		if (q_title =='') {
+			alert('제목을 입력해주세요.')	
+			$("#q_title").focus();
+			return;
+		} else if(q_writer =='') {
+			alert('작성자명을 입력해주세요.')	
+			$("#q_title").focus();
+			return;
+		}else if(q_pass ==''){
+			alert('비밀번호를 입력해주세요.')	
+			$("#q_pass").focus();
+			return;
+		}else if (q_content =='') {
+			alert('내용을 입력해주세요.')	
+			$("#q_title").focus();
+			return;
+		}
+	document.frm.submit();
+}
+</script>
+
+<style>
+	.q_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+	#question_add{
+		width : 80%;
+		margin: 200px auto 0px;
+		border-collapse: collapse;
+		border: 1px solid black;
+	}
+	.q_title {
+		width: 97%;
+	}
+	#q_file {
+		font-size: 12px;
+	}
+</style>
+
+	<form name = "frm" action="question_addact" method="post" enctype = "multipart/form-data">
+	<table id="question_add" border="1">
+	<tr>
+	<td><span style="color: red;">*</span>제목</td>
+	<td><input id="q_title" class='q_title' type="text" name="board_title" class="form-control" placeholder="이곳에 제목을 입력해주세요"></td>
+	</tr>
+		{% if session.mem_id %}
+	<tr>
+	<td><span style="color: red;">*</span>작성자</td>
+	<td><input id="q_writer" class='q_title' type="text" name="mem_id" class="form-control" value="{{session.mem_id}}"></td>
+	</tr>	
+	<tr>
+	<td><span style="color: red;">*</span>비밀번호</td>
+	<td><input id="q_pass" class='q_title' type="text" name="board_pass" class="form-control" value=""></td>
+	</tr>	
+		{% else %}
+	<tr>
+	<td><span style="color: red;">*</span>작성자</td>
+	<td><input  id="q_writer" class='q_title' type="text" name="mem_id" class="form-control" placeholder="외부인"></td>
+	</tr>	
+	<tr>
+	<td><span style="color: red;">*</span>비밀번호</td>
+	<td><input id="q_pass" class='q_title' type="text" name="board_pass" class="form-control" value=""></td>
+	</tr>
+		{% endif %}
+	<tr>
+	<td><span style="color: red;">*</span>문의내용</td>
+	<td><textarea  id="q_content" name="board_content" class="form-control"  rows="20" cols="80" placeholder="내용을 상세히 기입해주시면 신속한 처리에 도움이 됩니다."></textarea></td>
+	</tr>	
+	
+	<tr>
+	<td colspan="2"><input id="q_file" type="file" name="file"  class="form-control"></td>
+	</tr>	
+	<tr>
+	<th colspan="2"><input class="q_button" type="button" onclick="location:href='question_list'" value="목록으로"> <button class="q_button" type="button" onclick="fn_add()">문의하기</button></td>
+	</th>	
+	</table>
+	</form>
+
+{% endblock %} 

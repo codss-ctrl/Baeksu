@@ -1,0 +1,232 @@
+{% extends 'layout_admin.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+	function fn_detail(mem_id){
+		location.href="mem_id?mem_id="+mem_id;
+	}
+	
+	function fn_usermod(){
+		document.user_mod.submit();
+	}
+	
+	function fn_userinput(mem_id ,mem_mail,mem_name ,mem_job,del_yn){
+		$('#mem_id').val(mem_id);
+		$('#mem_mail').val(mem_mail);
+		$('#mem_name').val(mem_name);
+		$('#mem_job').val(mem_job);
+		$('#del_yn').val(del_yn);
+		
+		
+		var html_n = "";
+		html_n += "<button type='button' class='user_set_button btn btn-secondary' onclick='fn_useryn()'>회원 비활성화</button>";
+		html_n += "<button type='submit' class='user_set_button btn btn-secondary' id='mod' onclick='fn_usermod()'>수정완료</button>";
+		html_n += "<button type='button' class='user_set_button btn btn-secondary' data-dismiss='modal'>닫기</button>";
+		
+		var html_y = "";
+		html_y += "<button type='submit' class='user_set_button btn btn-secondary' id='mod' onclick='fn_usermod()'>수정완료</button>";
+		html_y += "<button type='button' class='user_set_button btn btn-secondary' data-dismiss='modal'>닫기</button>";
+
+		var html_d = "";
+		html_d += "<button type='button' class='user_set_button btn btn-secondary' onclick='fn_act()'>회원 활성화</button>";
+		html_d += "<button type='submit' class='user_set_button btn btn-secondary' id='mod' onclick='fn_usermod()'>수정완료</button>";
+		html_d += "<button type='button' class='user_set_button btn btn-secondary' data-dismiss='modal'>닫기</button>";
+		
+		console.log(del_yn);
+		if(del_yn == "N"){
+			$("#div_btn_info").html(html_n);
+		} else if (del_yn == "Y"){
+			$("#div_btn_info").html(html_y);
+		} else if (del_yn == "D"){
+			$("#div_btn_info").html(html_d);
+		}
+		
+		
+	}
+
+ 	$(function(){		
+		var mem_id = $("#mem_id").val();
+		var mem_mail = $("#mem_mail").val();
+		var mem_name = $("#mem_name").val();
+		var mem_job = $("#mem_job").val();
+		var del_yn = $("#del_yn").val();
+ 	})
+ 	
+ 	function fn_useryn(){
+ 		var mem_id = $("#mem_id").val();
+ 		
+ 		var param ="";
+ 		param += "dummy="+ Math.random();
+ 		param += "&mem_id="+mem_id;
+ 		
+	 		$.ajax({
+	 		   url : "user_yn.ajax",
+	 		   data : param,
+	 		   dataType : "json",
+	 		   type : "post",
+	 		   async : false,
+	 		   statusCode : {
+	 		      404 : function() {
+	 		         alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+	 		      }
+	 		   },
+	 		   success : function(data) {
+	 		      if(data.msg == "ok"){
+	 		    	 alert("비활성화 완료");
+	 		         location.reload();
+	 		      	
+	 		      } else{
+	 		         alert("비활성화 도중 문제가 생겼습니다")
+	 		      }
+	 		   }
+	 		});
+		}
+ 	
+ 	function fn_act(){
+ 		var mem_id = $("#mem_id").val();
+ 		
+ 		var param ="";
+ 		param += "dummy="+ Math.random();
+ 		param += "&mem_id="+mem_id;
+ 		
+	 		$.ajax({
+	 		   url : "user_act.ajax",
+	 		   data : param,
+	 		   dataType : "json",
+	 		   type : "post",
+	 		   async : false,
+	 		   statusCode : {
+	 		      404 : function() {
+	 		         alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+	 		      }
+	 		   },
+	 		   success : function(data) {
+	 		      if(data.msg == "ok"){
+	 		    	 alert("활성화 완료");
+	 		         location.reload();
+	 		      	
+	 		      } else{
+	 		         alert("활성화 도중 문제가 생겼습니다")
+	 		      }
+	 		   }
+	 		});
+		}
+ 		
+</script>
+
+<style>
+	* {
+		text-decoration: none;
+		text-align: center;
+	}
+	
+	th, td {
+		padding: 20px;
+	}
+	
+	 .user_set_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+	
+	#user_list {
+		margin: 200px auto;
+		height: auto;
+		width: 80%;
+	 	color: #757575;
+		border-collapse: collapse;
+	}
+</style>
+
+	<table id="user_list">
+		<tr class="tr_height">
+			<th>순번</th>
+			<th>아이디</th>
+			<th>이메일</th>
+			<th>이름</th>
+			<th>희망직군</th>
+			<th>회원상태</th>
+			<th>기능</th>
+		</tr>
+		   
+		   
+		{% for idx, s in enumerate(list) %}
+		<tr class="tr_height">
+			<td>{{idx+1}}</td>
+			<td>{{s.mem_id}}</td>
+			<td>{{s.mem_mail}}</td>
+			<td>{{s.mem_name}}</td>
+			<td>{{s.mem_job}}</td>
+			<td>{{s.del_yn}}</td>
+			<td><input type="button" class="user_set_button" value="수정" data-toggle="modal" data-target="#myModal" onclick="fn_userinput('{{s.mem_id}}','{{s.mem_mail}}','{{s.mem_name}}','{{s.mem_job}}','{{s.del_yn}}')"/></a></td>
+
+		</tr>
+		{% endfor %}
+		   
+
+	
+	</table>
+
+
+  <!-- The Modal -->
+<form name="user_mod" action="user_modact" method="post">
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+	<!-- Modal content--> 
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">회원 정보 수정</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+			  <div class="form-group">
+			    <label for="mem_id">아이디:</label>
+			    <input type="text" id="mem_id" name = mem_id class="form-control" readonly >
+			  </div>
+			  <div class="form-group">
+			    <label for="mem_email">이메일:</label>
+			    <input type="text" id="mem_mail" name="mem_mail" class="form-control">
+			  </div>
+			  <div class="form-group">
+			    <label for="mem_name">이름:</label>
+			    <input type="text" id="mem_name" name="mem_name" class="form-control" >
+			  </div>
+			  <div class="form-group">
+			    <label >희망직종:</label>
+				    <select id="mem_job" name="mem_job" style="width:100%;" class="form-control">
+					    <option value="웹개발자">웹개발자</option>
+					    <option value="앱개발자">앱개발자</option>
+					    <option value="서버보안" selected>서버보안</option>
+					    <option value="게임">게임 </option>
+					    <option value="AI빅데이터">AI빅데이터</option>
+					    <option value="데이터베이스">데이터베이스</option>
+				 	</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="del_yn">회원상태:</label>
+			    <input type="text" id="del_yn" name="del_yn" class="form-control" >
+			  </div>
+				<div id="div_btn_info" class="form-group">
+
+
+				</div>
+
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

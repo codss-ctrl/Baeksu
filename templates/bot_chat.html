@@ -1,0 +1,204 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery-3.5.1.js"></script>
+<style>
+#calbt {
+	width: 281px;
+	height: 30px;
+	margin-top: 15px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 900;
+	background: rgb(0, 128, 64);
+	border: 1px solid rgb(0, 128, 64);
+	border-radius: 5px;
+	color: rgb(255, 255, 255);
+}
+</style>
+<script>
+	var res = ""
+	var isRecognizing = false;
+	
+	if ('SpeechRecognition' in window) {
+		console.log("음성인식을 지원하는 브라우저입니다.")
+	}
+	
+	try {
+		var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+	} catch(e){
+		console.error(e);
+	}
+	
+	recognition.lang = 'ko-KR';  
+	recognition.interimResults = false;
+	recognition.maxAlternatives = 5;
+	//recognition.continuous = true;
+
+	function speech_to_text(){
+		
+		recognition.start();
+		isRecognizing = true;
+
+		recognition.onstart = function(){
+			console.log("음성인식이 시작 되었습니다. 이제 마이크에 무슨 말이든 하세요.")
+		}
+		recognition.onresult = function(event) {
+			console.log('You said: ', event.results[0][0].transcript);
+			var resText = "<br/>[나의 답변] <br/> " + event.results[0][0].transcript;
+			$('#my_answer').html(resText)
+		};
+
+		recognition.onend = function(){
+			isRecognizing = false;
+		}
+	}
+
+	function fn_show(){
+		$("#bot_info").hide(); 
+		$("#chatbox").show(); 
+		random_question();
+	}
+	
+	function save_answer(){
+		
+		if ('{{session.mem_id}}'=='') {
+			alert('로그인 후 이용가능합니다. \n회원이 아니시라면 가입 후 이용해주세요!')
+			location.href="login"
+		}
+		
+		 
+		
+		var bot_question_seq = $('#bot_question_seq').val()
+		var my_answer = $('#my_answer').text()
+		
+		if (my_answer == ''){
+			my_answer = '답변하지 않았습니다.'
+		}
+		
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&bot_question_seq="+bot_question_seq;
+		param += "&my_answer="+my_answer;
+		
+		console.log(param)
+		
+		$.ajax({
+			url : "bot_answer.ajax",
+			data : param,
+			dataType : "json",
+			type : "get",
+			async: false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if(data.msg == "ok"){
+					alert("답변 저장 완료");
+					$('#my_answer').text(" ");
+					random_question();
+				} else {
+					alert("저장 도중 문제가 생겼습니다. 관리자에게 문의해주세요.");
+				}
+			}
+		});
+		//location.reload();
+	}
+
+	lastres = "";
+	function random_question(){
+		var q_seq_arr = []
+		var q_ask_arr = []
+		
+		{% for i in questions %}
+			q_seq_arr.push('{{i.intrvw_seq}}')
+			q_ask_arr.push('{{i.intrvw_content}}')
+		{% endfor %}
+		
+		var ram_n = Math.floor(Math.random()*q_ask_arr.length);
+		lastres = q_ask_arr[ram_n];
+		$("#bot_question").html(lastres);
+		$("#bot_question_seq").val(q_seq_arr[ram_n]);
+		speak();
+	} 
+
+	function speak(opt_prop) {
+		console.log(speak)
+		var str = "면접을 시작합니다"
+		if (typeof SpeechSynthesisUtterance === "undefined" || typeof window.speechSynthesis === "undefined") {
+			alert("이 브라우저는 음성 합성을 지원하지 않습니다.")
+			return
+		}
+        
+		window.speechSynthesis.cancel() // 현재 읽고있다면 초기화
+
+		const prop = opt_prop || {}
+
+		const speechMsg = new SpeechSynthesisUtterance()
+		speechMsg.rate = prop.rate || 1 // 속도: 0.1 ~ 10      
+		speechMsg.pitch = prop.pitch || 1 // 음높이: 0 ~ 2
+		speechMsg.lang = prop.lang || "ko-KR"
+		speechMsg.text = lastres
+        
+		// SpeechSynthesisUtterance에 저장된 내용을 바탕으로 음성합성 실행
+		window.speechSynthesis.speak(speechMsg)
+		lastres = ""
+    }
+           
+	$(document).ready(function(){ 
+		$("#chatbox").hide(); 
+		const selectLang = document.getElementById("select-lang")
+		const text = document.getElementById("text")
+		var str = "면접을 시작합니다"
+	
+		speak(str.text, {
+    		rate: 1,
+    		pitch: 1.2,
+    		lang: selectLang.options[selectLang.selectedIndex].value
+		})
+	})
+</script>
+
+<table id="chatbox">
+	<tr>
+		<td>
+			<span id="bot_question"></span>
+			<input id="bot_question_seq" type="hidden" />
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<img id="mike_img" src="image/mike.jpg" width='100px' border='0' onclick="javascript:speech_to_text()"><span id="bot_question"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<span id="bot_tel">*질문을 읽고 잘 생각해 본 뒤 마이크를 눌러 질문에 답변하세요.</span><br/>
+			<span id="my_answer"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		 	<input type="button" class="bot_button" id="calbt" value="🥰내 답변 저장하기" onclick="save_answer()"> 
+		 	<input type="button" class="bot_button" id="calbt" value="질문바꾸기🥰" onclick="random_question()">
+		</td>
+	</tr>
+</table>
+
+<div id="bot_info">
+	<img src="image/bot_003.png" width="200px">
+	<br /> 
+	<br /> 안녕하세요. 
+	<br /> 당신의 백전취업을 함께 준비할
+	<br /> 면접봇 홍합구이 입니다.
+	<br /> 당신은 준비된 인재! 오늘도 힘내세요!
+	<br /> 
+	<br /> 
+	<input type="button" class="bot_button" id="calbt" value="시작하기" onclick="javascript:fn_show()"><br />
+</div>
+
+{% endblock %}

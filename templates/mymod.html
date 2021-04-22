@@ -1,0 +1,165 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<script src="js/jquery-3.5.1.js"></script>
+<script>
+	window.onload = function() {
+		$('#mem_id').val("{{list['mem_id']}}");
+		$('#mem_pass').val("{{list['mem_pass']}}");
+		$('#mem_name').val("{{list['mem_name']}}");
+		$('#mem_mail').val("{{list['mem_mail']}}");
+		$("#mem_job").val("{{list['mem_job']}}").prop("selected", true);
+		$('#dday_title').val("{{list['dday_title']}}");
+		$('#dday_date').val("{{list['dday_date']}}");
+	}
+ 
+	function mymod(){
+		
+		var mem_id 			= $("#mem_id").val();
+		var mem_pass 	 	= $("#mem_pass").val();
+		var mem_name 		= $("#mem_name").val();
+		var mem_mail 		= $("#mem_mail").val(); 
+		var mem_job 		= $("select[name=mem_job]").val();
+		var dday_title 		= $("#dday_title").val();
+		var dday_date 		= $("#dday_date").val();
+	      
+		if(dday_title=='' || dday_title=='None'){
+	          dday_title = "디데이"
+	       }
+	      
+		var passRule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+		if (!passRule.test(mem_pass)) {
+			alert("암호는 8자 이상, 문자와 숫자가 최소 하나 이상 들어가야 합니다");
+			$("#mem_pass").focus();
+			return;
+		}
+
+		if (mem_name == "") {
+			alert("이름을 입력해주세요");
+			$("#mem_name").focus();
+			return;
+		}
+		if (20 < mem_name.length || mem_name.length < 2) {
+			alert("이름의 길이를 확인해주세요");
+			$("#mem_name").focus();
+			return;
+		}
+		if (mem_mail == "") {
+			alert("이메일을 입력해주세요");
+			$("#mem_mail").focus();
+			return;
+		}
+
+		var emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;//이메일 정규식
+		if (!emailRule.test(mem_mail)) {
+			alert("이메일 형식이 올바르지 않습니다");
+			$("#mem_mail").focus();
+			return;
+		}
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&mem_id=" + mem_id;
+		param += "&mem_pass=" + mem_pass;
+		param += "&mem_name=" + mem_name;
+		param += "&mem_mail=" + mem_mail;
+		param += "&mem_job=" + mem_job;
+		param += "&dday_title=" + dday_title;
+		param += "&dday_date=" + dday_date;
+
+		console.log(param)
+
+		$.ajax({
+			url : "mymod.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			success : function(data) {
+				if (data.msg == "ok") {
+					alert("개인정보 수정 완료");
+					location.href = "mypage"
+				} else if (data.msg == "mail_exist") {
+					alert("이미 존재하는 이메일입니다");
+				} else {
+					alert("실행 도중 문제가 생겼습니다");
+				}
+			}
+		});
+	}
+</script>
+
+<style>
+	* {
+		text-decoration: none;
+		text-align: center;
+		font-size: 12px;
+	}
+	#join_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: white;
+		color: black;
+		border: 1px solid #888888;
+	}
+	#join_form {
+		margin: 200px auto;
+	}
+	.mod_button {
+	font-size: 12px;
+	cursor: pointer;
+	background-color: #269463;
+	color: white;
+	border: 1px solid #269463;
+	}
+</style>
+	<table id="join_form">
+		<tr>
+			<th>아이디</th>
+			<th><input type="text" id="mem_id" name="mem_id" disabled /></th>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<th><input type="password" id="mem_pass" name="mem_pass" /></th>
+		</tr>
+		<tr>
+			<th>이름</th>
+			<th><input type="text" id="mem_name" name="mem_name" /></th>
+		</tr>
+		<tr>
+			<th>이메일</th>
+			<th><input type="text" id="mem_mail" name="mem_mail" /></th>
+		</tr>
+		<tr>
+			<th>희망직종</th>
+			<th><select name="mem_job" id="mem_job" style="width: 147px;">
+					<option value="웹개발자">웹개발자</option>
+					<option value="앱개발자">앱개발자</option>
+					<option value="서버보안">서버보안</option>
+					<option value="게임">게임</option>
+					<option value="AI빅데이터">AI빅데이터</option>
+					<option value="데이터베이스">데이터베이스</option>
+			</select></th>
+		</tr>
+		<tr>
+			<th>디데이명</th>
+			<th><input type="text" id="dday_title" name="dday_title" /></th>
+		</tr>
+		<tr>
+			<th>디데이설정</th>
+			<th><input style="width: 147px;" type="date" id="dday_date" name="dday_date" /></th>
+		</tr>
+		<tr>
+			<th></th>
+			<th></th>
+		</tr>
+		<tr>
+			<th colspan="2">
+			<input type="button" class="mod_button" value="수정완료" onclick="mymod()" />
+			<input type="button" class="mod_button" value="뒤로가기" onclick="location.href='mypage'" />
+			</th>
+		</tr>
+	</table>
+
+{% endblock %}

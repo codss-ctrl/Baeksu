@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Test">
+   <select id="myselect_list">
+      select
+         memo_seq, 
+         memo_content, 
+         memo_yn, 
+         in_date, 
+         in_user_id, 
+         up_date, 
+         up_user_id
+       from 
+          memo
+       where
+          in_user_id =:1
+       order by in_date
+   </select>
+   
+   <select id="myselect">
+      select
+         memo_yn 
+       from 
+          memo
+       where
+          memo_seq =:1
+   </select>   
+   
+   <update id="insert">
+      insert into memo 
+      (
+         memo_seq, 
+         memo_content, 
+         memo_yn, 
+         in_date, 
+         in_user_id, 
+         up_date, 
+         up_user_id
+      ) 
+      values
+      (
+         memo_seq.nextval,
+         :1, 
+         'N', 
+         to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+         :3, 
+         to_char(sysdate, 'YYYYMMDD.HH24MISS'), 
+         :4
+      )
+   </update>
+   
+   <update id="update">
+      update
+         memo 
+      set 
+         memo_yn	=:1 
+      where 
+         memo_seq	=:2
+   </update>
+
+   <update id="delete">
+      delete from memo 
+      where 
+         memo_seq	=:1
+   </update>
+</mapper>

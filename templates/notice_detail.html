@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+<style>
+	.notice_detail{
+		margin:100px;
+	}
+	.notice_button{
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+
+</style>
+<script>
+	function fn_list(){
+		location.href="notice_list"
+	}
+	$(function() {
+	    $('#notice_content').html(
+	          $('#notice_content').html().replaceAll('\r', '').replaceAll('\n',
+	                '<br>'))
+	})
+</script>
+<section class="notice_detail">
+<!-- Header -->
+   <header id="header">
+     <div class="logo">
+       공지사항
+     </div>
+   </header>
+
+   <!-- Page Heading -->
+   <div class="page-heading">
+     <div class="container-fluid">
+       <div class="row">
+         <div class="col-md-12">
+           <h1>{{notice.notice_title}}</h1>
+           <h5>{{notice.in_date}}</h5>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <!-- Simple Post -->
+   <section class="simple-post">
+     <div class="container-fluid">
+       <div class="row">
+         <div class="col-md-12">
+           <div class="down-content">
+             <p id= "notice_content" >{{notice.notice_content}}</p>
+           </div>
+         </div>
+       </div>
+     </div>
+    </section>    
+   <section class="simple-post">
+     <div class="container-fluid">
+       <div class="row">
+         <div class="col-md-12">
+           <div class="down-content">
+           <span><input type="button" class="notice_button" value="목록으로" onclick="fn_list()" /></span>
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
+</section>
+
+ 
+{% endblock %} 

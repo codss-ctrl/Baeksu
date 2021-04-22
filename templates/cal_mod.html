@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<style>
+	#cal_mod{
+		width : 80%;
+		margin: 200px auto 0px;
+		border-collapse: collapse;
+		border: 1px solid black;
+	}
+	#plan_title {
+		width: 100%;
+	}
+	.cal_set_button {
+		font-size: 12px;
+		cursor: pointer;
+		background-color: #269463;
+		color: white;
+		border: 1px solid #269463;
+	}
+</style>
+<script src="js/jquery-3.5.1.js"></script>
+<script>
+	function cal_mod() {
+		var plan_seq = '{{plan_detail.plan_seq}}'
+		var plan_title = $('#plan_title').val()
+		var plan_content = $('#plan_content').val()
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&plan_seq=" + plan_seq;
+		param += "&plan_title=" + plan_title;
+		param += "&plan_content=" + plan_content;
+
+		$.ajax({
+			url : "cal_modact.ajax",
+			data : param,
+			dataType : "json",
+			type : "post",
+			async : false,
+			statusCode : {
+				404 : function() {
+					alert("네트워크가 불안정합니다. 다시 시도부탁드립니다.");
+				}
+			},
+			success : function(data) {
+				if (data.msg == "ok") {
+					//alert("일정 수정 완료");
+					location.href = 'calender'
+				} else {
+					alert("수정 도중 문제가 생겼습니다. 관리자에게 문의해주세요.");
+				}
+			}
+		});
+	}
+</script>
+ 
+<table id="cal_mod" border="1">
+	<tr>
+		<th class="memo_title">제목</th>
+		<td><input id="plan_title" type="text" value="{{plan_detail.plan_title}}" /></td>
+	</tr>
+	<tr>
+		<th>내용</th>
+		<td><textarea id="plan_content" rows="15" cols="80" value="">{{plan_detail.plan_content|replace('<br/>','\n')|safe}}</textarea></td>
+	</tr>
+	<tr>
+		<th colspan="2">
+			<input type="button" class="cal_set_button" value="수정하기" onclick="cal_mod()"> 
+			<input type="button" class="cal_set_button" value="돌아가기" onclick="location.href='calender'">
+		</th>
+	</tr>
+</table>
+
+{% endblock %}

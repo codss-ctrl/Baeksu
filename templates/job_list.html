@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+<meta charset="UTF-8">
+{% block content %}
+
+<style>
+	* {
+		text-decoration: none;
+		text-align: center;
+	}
+	
+	a:hover {
+		cursor: pointer;
+	}
+</style>
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery-3.5.1.js"></script>
+<script>
+	function addToJobList(clicked) {
+		var selected = clicked.id;
+		var scrap_name = $('#' + 'com_name' + selected).text();
+		var scrap_url = $('#' + 'com_url' + selected).attr("href");
+		var scrap_comp = $('#' + selected).parent().prev().text();
+
+		var param = "";
+		param += "dummy=" + Math.random();
+		param += "&scrap_name=" + scrap_name;
+		param += "&scrap_url=" + scrap_url;
+		param += "&scrap_comp=" + scrap_comp;
+
+		$.ajax({
+			url : "job_add.ajax",
+			data : param,
+			dataType : "json",
+			type : "get",
+			success : function(data) {
+				if (data.msg == "ok") {
+					alert("내 리스트에 추가되었습니다.")
+					location.reload(true);
+				} else if(data.msg=="exist") { 
+					alert("이미 추가된 공고입니다.");
+				} else {
+					alert("추가 도중 문제가 발생했습니다. 관리자에게 문의하세요.");
+				}
+			}
+		});
+	}
+</script>
+
+<div id="jobmenu_bar">
+	<input type="button" class="search_button" value="채용공고 모아보기" onclick="location.href='job_list'"> <input type="button" class="search_button" value="스크랩한 채용공고"
+		onclick="location.href='job_list_selected'">
+</div>
+
+<table id="job_list">
+	<tr>
+		<th>순번</th>
+		<th>공고명</th>
+		<th>기업명</th>
+		<th>추가하기</th>
+	</tr>
+	{% for idx, list in enumerate(list_all) %}
+	<tr class="job_link">
+		<td>{{idx+1}}</td>
+		<td><a id="com_url{{idx+1}}" href="{{list.scrap_url}}" target="_blank"> <span id="com_name{{idx+1}}">{{list.scrap_name}}</span>
+		</a></td>
+		<td>{{list.scrap_comp}}</td>
+		<td><input type="button" id="{{idx+1}}" class="add_button" value="추가하기" onclick="addToJobList(this)"></td>
+	</tr>
+	{% endfor %}
+</table>
+
+{% endblock %}

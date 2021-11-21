@@ -55,7 +55,7 @@
 			success : function(data) {
 				if (data.msg == "ok") {
 					//alert("일정 등록 완료");
-					location.href = 'calender'
+					location.href = 'calendar'
 				} else {
 					alert("저장 도중 문제가 생겼습니다. 관리자에게 문의해주세요.");
 				}
@@ -80,7 +80,7 @@
 	<tr>
 		<th colspan="2">
 			<input type="button" class="cal_set_button" value="등록하기" onclick="cal_add()"> 
-			<input type="button" class="cal_set_button" value="돌아가기" onclick="location.href='calender'">
+			<input type="button" class="cal_set_button" value="돌아가기" onclick="location.href='calendar'">
 		</th>
 	</tr>
 </table>

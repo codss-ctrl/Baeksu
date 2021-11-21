@@ -1,11 +1,15 @@
 import cx_Oracle
 import mybatis_mapper2sql
+import xml.etree.ElementTree as elemTree
 
-class DaoCalender:
+keyXml = elemTree.parse('keys.xml')
+db_address = keyXml.find('string[@name="db_address"]').text
+
+class DaoCalendar:
     def __init__(self):
-        self.conn = cx_Oracle.connect('team3/java@192.168.41.24:1521/xe')
+        self.conn = cx_Oracle.connect(db_address)
         self.cs = self.conn.cursor()
-        self.mapper = mybatis_mapper2sql.create_mapper(xml='mybatis_calender.xml')[0]
+        self.mapper = mybatis_mapper2sql.create_mapper(xml='mybatis_calendar.xml')[0]
     
     def select_myplan(self, mem_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "select_myplan")

@@ -47,7 +47,7 @@
 			success : function(data) {
 				if (data.msg == "ok") {
 					//alert("일정 수정 완료");
-					location.href = 'calender'
+					location.href = 'calendar'
 				} else {
 					alert("수정 도중 문제가 생겼습니다. 관리자에게 문의해주세요.");
 				}
@@ -68,7 +68,7 @@
 	<tr>
 		<th colspan="2">
 			<input type="button" class="cal_set_button" value="수정하기" onclick="cal_mod()"> 
-			<input type="button" class="cal_set_button" value="돌아가기" onclick="location.href='calender'">
+			<input type="button" class="cal_set_button" value="돌아가기" onclick="location.href='calendar'">
 		</th>
 	</tr>
 </table>

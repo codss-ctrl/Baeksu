@@ -24,9 +24,9 @@ from dao_graph import DaoGraph
 DIR_UPLOAD = "D:/test"
 app = Flask(__name__, static_url_path='', static_folder='static')
 
-# keyXml = elemTree.parse('keys.xml')
-# secretKey = keyXml.find('string[@name="secret_key"]').text
-# app.config['SECRET_KEY'] = secretKey
+keyXml = elemTree.parse('keys.xml')
+secretKey = keyXml.find('string[@name="secret_key"]').text
+app.config['SECRET_KEY'] = secretKey
 
 
 

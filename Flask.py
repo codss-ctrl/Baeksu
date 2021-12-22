@@ -5,21 +5,21 @@ from datetime import timedelta, datetime
 import os, random, string
 import xml.etree.ElementTree as elemTree
 
-from dao_member import DaoMember
-from dao_scrap import DaoScrap
-from dao_answer import DaoAnswer
-from dao_after import DaoAfter
-from dao_board import MyDaoBoard
-from dao_memo import MyDaoMemo
-from dao_notice import MyDaonotice
-from dao_admin import DaoAdmin
-from dao_cmt import DaoCmt
+from dao.dao_member import DaoMember
+from dao.dao_scrap import DaoScrap
+from dao.dao_answer import DaoAnswer
+from dao.dao_after import DaoAfter
+from dao.dao_board import MyDaoBoard
+from dao.dao_memo import MyDaoMemo
+from dao.dao_notice import MyDaonotice
+from dao.dao_admin import DaoAdmin
+from dao.dao_cmt import DaoCmt
+from dao.dao_interview import DaoInterview
+from dao.dao_calendar import DaoCalendar
+from dao.dao_visit import DaoVisit
+from dao.dao_graph import DaoGraph
 from scraping import Scrap
 from save_excel import Excel
-from dao_interview import DaoInterview
-from dao_calendar import DaoCalendar
-from dao_visit import DaoVisit
-from dao_graph import DaoGraph
 
 DIR_UPLOAD = "D:/test"
 app = Flask(__name__, static_url_path='', static_folder='static')

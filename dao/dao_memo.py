@@ -2,14 +2,14 @@ import cx_Oracle
 import mybatis_mapper2sql  
 import xml.etree.ElementTree as elemTree
 
-keyXml = elemTree.parse('keys.xml')
+keyXml = elemTree.parse('../keys.xml')
 db_address = keyXml.find('string[@name="db_address"]').text
 
 class MyDaoMemo:
     def __init__(self):
         self.conn = cx_Oracle.connect(db_address)
         self.cs = self.conn.cursor()
-        self.mapper = mybatis_mapper2sql.create_mapper(xml='mybatis_memo.xml')[0]
+        self.mapper = mybatis_mapper2sql.create_mapper(xml='mapper/mybatis_memo.xml')[0]
         
     def myselect_list(self, in_user_id):
         sql = mybatis_mapper2sql.get_child_statement(self.mapper, "myselect_list")

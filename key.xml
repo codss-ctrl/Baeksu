@@ -2,5 +2,5 @@
 
 <resources>
     <string name="secret_key">mykey</string>
-    <string name="db_address">baeksu/1234@192.168.0.139:1521/xe</string>
+    <string name="db_address">baeksu/{password}@{ip-address}/xe</string>
 </resources>

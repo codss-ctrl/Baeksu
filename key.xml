@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<resources>
+    <string name="secret_key">mykey</string>
+    <string name="db_address">baeksu/{password}@{ip-address}/xe</string>
+</resources>

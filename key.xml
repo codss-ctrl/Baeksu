@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<resources>
+    <string name="secret_key">mykey</string>
+    <string name="db_address">baeksu/1234@192.168.0.139:1521/xe</string>
+</resources>

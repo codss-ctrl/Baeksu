@@ -29,6 +29,15 @@ DDIT 'AI 기술을 활용한 소프트웨어 엔지니어링' 중간프로젝트
 
 - calendar 관련 파일 오타 리팩토링
 - github에 기록용으로 남기기 위해 database 관련 정보들을 다 공개로 올렸지만 현실의 사이트를 배포할 때는 보안상 데이터베이스 정보와 API Key 등을 공개하지 않는다는 점에서 key를 암호화
+  - key.xml (깃허브에는 올라와 있지 않음)
+    ```
+      <?xml version="1.0" encoding="UTF-8" ?>
+
+      <resources>
+          <string name="secret_key">mykey</string>
+          <string name="db_address">baeksu/비밀번호@{ip-address}/xe</string>
+      </resources>
+    ```
   - elemTree 사용
     ```
     app = Flask(__name__, static_url_path='', static_folder='static')

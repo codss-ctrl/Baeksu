@@ -8,6 +8,9 @@ DDIT AI 기술을 활용한 소프트웨어 엔지니어링 중간프로젝트<b
 
 구현한 화면은 사용자 메뉴얼을 통해 확인해주세요 : <a href="https://github.com/teraglass/Baeksu/blob/main/manual/baeksu_manual.pptx">![manual](https://img.shields.io/badge/Manual-47A248?style=flat&logo=Matrix&logoColor=white)</a>
 </div>
+
+---
+
 #### 사용한 기술
 
 - 서버 : Python, Flask

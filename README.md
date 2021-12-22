@@ -2,7 +2,7 @@
 <div align=center>
 <img src="https://github.com/teraglass/Baeksu/blob/main/manual/home.png" width="500" height="375">
 
-DDIT AI 기술을 활용한 소프트웨어 엔지니어링 중간프로젝트<br/>
+DDIT 'AI 기술을 활용한 소프트웨어 엔지니어링' 중간프로젝트<br/>
 
 프로젝트 기간 : 2021-04-07 ~ 2021-04-21 <br/>
 

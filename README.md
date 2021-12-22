@@ -1,6 +1,7 @@
 # 프로젝트명 : 백수탈출
 <div align=center>
 <img src="https://github.com/teraglass/Baeksu/blob/main/manual/home.png" width="500" height="375"><br/>
+  
 
 DDIT 'AI 기술을 활용한 소프트웨어 엔지니어링' 중간프로젝트<br/>
 

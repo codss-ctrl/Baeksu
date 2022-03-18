@@ -15,7 +15,7 @@ DDIT 'AI 기술을 활용한 소프트웨어 엔지니어링' 중간프로젝트
 
 #### 사용한 기술
 
-- 서버 : Python, Flask
+- 미들웨어 : Python, Flask
 - DB 및 DB 연결 라이브러리 : Oracle, mybatis
 - 게시판 페이지 : HTML, CSS, Jquery, JavaScript
 - 프로젝트 버전 관리 : SVN (이클립스 내), RedMine (관련 문서 작성 및 보고)

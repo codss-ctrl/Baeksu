@@ -8,17 +8,23 @@ DDIT 'AI 기술을 활용한 소프트웨어 엔지니어링' 중간프로젝트
 
 프로젝트 기간 : 2021-04-07 ~ 2021-04-21 <br/>
 
-주제 : 개발자 취준생들을 위한 웹사이트 '백수탈출'
+
   
-주요 기능  
+구현한 화면은 사용자 메뉴얼(ppt)을 통해 확인해주세요 : <a href="https://github.com/teraglass/Baeksu/blob/main/manual/baeksu_manual.pptx">![manual](https://img.shields.io/badge/Manual-47A248?style=flat&logo=Matrix&logoColor=white)</a>
+</div>
+
+---
+#### 주제 : 개발자 취준생들을 위한 웹사이트 '백수탈출'
+  
+#### 주요 기능  
+
   - 기술 면접 연습(TTS 기능으로 듣고 말하여 대답 내용 저장 가능)
   - 개발자 구직구인 정보 확인 및 스크랩 기능
   - 메모 기능
   - 월간 플래너 기능
+  - 맞춤법 검사
   - 글자 수 세기
-  
-구현한 화면은 사용자 메뉴얼(ppt)을 통해 확인해주세요 : <a href="https://github.com/teraglass/Baeksu/blob/main/manual/baeksu_manual.pptx">![manual](https://img.shields.io/badge/Manual-47A248?style=flat&logo=Matrix&logoColor=white)</a>
-</div>
+
 
 ---
 
